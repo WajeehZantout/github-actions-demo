@@ -1,0 +1,29 @@
+name: CI
+
+on: [push]
+
+jobs:
+  test:
+    name: Run test on ${{ matrix.os }} with node version ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node: [8, 10, 12]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Setup node env
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Run test
+      run: yarn test
+      env:
+        CI: true
